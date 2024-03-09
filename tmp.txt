@@ -1,0 +1,5 @@
+Consolas, 'Courier New', monospace
+FiraCode
+'Fira Mono'
+Comfortaa
+Source Code Pro
