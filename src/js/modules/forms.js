@@ -1,15 +1,16 @@
 const forms = () => {
   const form = document.querySelectorAll("form"),
-    input = document.querySelectorAll("input");
+    inputs = document.querySelectorAll("input");
 
   const message = {
     loading: "Loading...",
     success: "Thanks. We will call you.",
     failure: "Something going wrong. :(",
   };
-
+  // <{<{<{<{<{<{<{<{<{<{<{<    postData    >}>}>}>}>}>}>}>}>}>}>}>
+  //todo Make request
   const postData = async (url, data) => {
-    document.querySelector("status").textContent = message.loading;
+    document.querySelector(".status").textContent = message.loading;
     let res = await fetch(url, {
       method: "POST",
       body: data,
@@ -18,9 +19,16 @@ const forms = () => {
     return await res.text();
   };
 
+  // <{<{<{<{<{<{<{<{<{<{<{<    clearInputs    >}>}>}>}>}>}>}>}>}>}>}>
+  const clearInputs = () => {
+    inputs.forEach((item) => {
+      item.value = "";
+    });
+  };
+
   form.forEach((item) => {
     item.addEventListener("submit", (e) => {
-      e.preventDefault;
+      e.preventDefault();
 
       let statusMessage = document.createElement("div");
       statusMessage.classList.add("status");
@@ -33,7 +41,13 @@ const forms = () => {
           console.log(res);
           statusMessage.textContent = message.success;
         })
-        .catch(() => (statusMessage.textContent = message.failure));
+        .catch(() => (statusMessage.textContent = message.failure))
+        .finally(() => {
+          clearInputs();
+          setTimeout(() => {
+            statusMessage.remove();
+          }, 5000);
+        });
     });
   });
 };
