@@ -1,6 +1,14 @@
 const forms = () => {
   const form = document.querySelectorAll("form"),
-    inputs = document.querySelectorAll("input");
+    inputs = document.querySelectorAll("input"),
+    phoneInputs = document.querySelectorAll('input[name="user_phone"]');
+
+  phoneInputs.forEach((item) => {
+    //todo---only numbers input check
+    item.addEventListener("input", () => {
+      item.value = item.value.replace(/\D/, ""); //todo`````if input != num, input == ''
+    });
+  });
 
   const message = {
     loading: "Loading...",
@@ -43,9 +51,9 @@ const forms = () => {
         })
         .catch(() => (statusMessage.textContent = message.failure))
         .finally(() => {
-          clearInputs();
+          clearInputs(); //todo clear inputs
           setTimeout(() => {
-            statusMessage.remove();
+            statusMessage.remove(); //todo remove message after 5s
           }, 5000);
         });
     });
