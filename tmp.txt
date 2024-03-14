@@ -4,3 +4,5 @@ FiraCode
 Comfortaa
 Source Code Pro
 
+'Fira Mono', 'Fira Code', 'Source Code Pro', 'Comfortaa'
+
