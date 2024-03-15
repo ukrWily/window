@@ -1,8 +1,12 @@
 Consolas, 'Courier New', monospace
-FiraCode
+Fira Code
 'Fira Mono'
 Comfortaa
 Source Code Pro
+Cormorant
+Montserrat Alternates
+Roboto Mono Light
+
 
 'Fira Mono', 'Fira Code', 'Source Code Pro', 'Comfortaa'
 
