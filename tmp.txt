@@ -5,6 +5,7 @@ Comfortaa
 Source Code Pro
 Cormorant
 Montserrat Alternates
+"Playpen Sans Regular"
 Roboto Mono Light
 
 

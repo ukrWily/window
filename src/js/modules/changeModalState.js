@@ -13,12 +13,21 @@ const changeModalState = (state) => {
   function bindActionToElems(event, elem, prop) {
     elem.forEach((item, i) => {
       item.addEventListener(event, () => {
-        if (elem.length > 1) {
-          state[prop] = i; //todo`````у об'єкті state(main.js) створюємо змінну form з номером обраного об'єкта
-        } else {
-          state[prop] = item.value;
+        switch (item.nodeName) {
+          case "SPAN":
+            console.log("span");
+            break;
+          case "INPUT":
+            if (item.getAttribute("type") === "checkbox") {
+              console.log("checkbox");
+            } else {
+              console.log("input");
+            }
+            break;
+          case "SELECT":
+            console.log("select");
+            break;
         }
-        console.log(state);
       });
     });
   }
@@ -26,6 +35,8 @@ const changeModalState = (state) => {
   bindActionToElems("click", windowForm, "form");
   bindActionToElems("input", windowHeight, "height");
   bindActionToElems("input", windowWidth, "width");
+  bindActionToElems("change", windowType, "type");
+  bindActionToElems("change", windowProfile, "profile");
 };
 
 export default changeModalState;
