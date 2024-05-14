@@ -136,7 +136,7 @@ const forms = state => {
         }
       }
       postData("assets/server.php", formData).then(res => {
-        console.log(res);
+        // console.log(res);
         statusMessage.textContent = message.success;
       }).catch(() => statusMessage.textContent = message.failure).finally(() => {
         clearInputs(); //todo clear inputs
@@ -208,7 +208,8 @@ const modals = () => {
     const trigger = document.querySelectorAll(triggerSelector),
       modal = document.querySelector(modalSelector),
       close = document.querySelector(closeSelector),
-      windows = document.querySelectorAll("[data-modal]");
+      windows = document.querySelectorAll("[data-modal]"),
+      scroll = calcScroll();
     trigger.forEach(item => {
       item.addEventListener("click", e => {
         if (e.target) {
@@ -220,6 +221,7 @@ const modals = () => {
         });
         modal.style.display = "block";
         document.body.style.overflow = "hidden"; //todo  блокуємо вікно від скрола під модалкой
+        document.body.style.marginRight = `${scroll}px`;
         // document.body.classList.add("modal-open"); //todo  Бутстрап!!!!
       });
     });
@@ -230,6 +232,7 @@ const modals = () => {
       });
       modal.style.display = "none";
       document.body.style.overflow = "";
+      document.body.style.marginRight = `0px`;
       // document.body.classList.remove("modal-open"); //todo  Бутстрап!!!!
     });
     modal.addEventListener("click", e => {
@@ -240,6 +243,7 @@ const modals = () => {
         });
         modal.style.display = "none";
         document.body.style.overflow = "";
+        document.body.style.marginRight = `0px`;
         // document.body.classList.remove("modal-open"); //todo  Бутстрап!!!!
       }
     });
@@ -250,12 +254,23 @@ const modals = () => {
       document.body.style.overflow = "hidden";
     }, time);
   }
+  function calcScroll() {
+    let div = document.createElement("div");
+    div.style.width = "50px";
+    div.style.height = "50px";
+    div.style.overflowY = "scroll";
+    div.style.visibility = "hidden";
+    document.body.appendChild(div);
+    let scrollWidth = div.offsetWidth - div.clientWidth;
+    div.remove();
+    return scrollWidth;
+  }
   bindModal(".popup_engineer_btn", ".popup_engineer", ".popup_engineer .popup_close");
   bindModal(".phone_link", ".popup", ".popup .popup_close");
   bindModal(".popup_calc_btn", ".popup_calc", ".popup_calc_close");
   bindModal(".popup_calc_button", ".popup_calc_profile", ".popup_calc_profile_close", false);
   bindModal(".popup_calc_profile_button", ".popup_calc_end", ".popup_calc_end_close", false);
-  showModalByTime(".popup", 60000);
+  showModalByTime(".popup_engineer", 50000);
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (modals);
 // popup_calc_btn
@@ -367,6 +382,88 @@ const timer = (id, deadline) => {
   setClock(id, deadline);
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (timer);
+
+/***/ }),
+
+/***/ "./src/js/parser.js":
+/*!**************************!*\
+  !*** ./src/js/parser.js ***!
+  \**************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// window.addEventListener("DOMContentLoaded", () => {
+//   const body = document.querySelector("body");
+//   body.childNodes.forEach((node) => {
+//     console.log(node);
+//   });
+// });
+
+const parser = () => {
+  const body = document.querySelector("body");
+  let textNodes = [];
+  function recursion(element) {
+    element.childNodes.forEach(node => {
+      /**
+       * фільтруємо - ^ -на початку повинна бути буква - H, потім цифра- \d
+       */
+      if (node.nodeName.match(/^H\d/)) {
+        const obj = {
+          header: node.nodeName,
+          body: node.textContent
+        };
+        // only textContent
+        // textNodes.push(node.textContent);
+
+        // object for sending
+        textNodes.push(obj);
+        /**
+         * якщо блок не пустий, рекурсивно перебираємо їх
+         */
+      } else {
+        recursion(node);
+      }
+      //<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>
+      // /**
+      //  * пропускаємо усі пусті текстові блоки
+      //  */
+      // if (node.nodeName === "#text") {
+      //   return;
+      //   /**
+      //    * якщо блок не пустий, рекурсивно перебираємо їх
+      //    */
+      // } else {
+      //   console.log(node);
+      //   recursion(node);
+      // }
+      //<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<{<>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>}>
+      // /**
+      //  * проходимось по всіх елементах
+      //  */
+      // if (element.childNodes.length > 1) {
+      //   recursion(node);
+      // }
+    });
+  }
+  recursion(body);
+  // console.log(textNodes);
+
+  /**
+   * send to server
+   */
+  fetch("https://jsonplaceholder.typicode.com/posts", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(textNodes)
+  }).then(response => response.json()).then(response => console.log(response));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (parser);
 
 /***/ }),
 
@@ -14287,6 +14384,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_changeModalState__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/changeModalState */ "./src/js/modules/changeModalState.js");
 /* harmony import */ var _modules_timer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/timer */ "./src/js/modules/timer.js");
 /* harmony import */ var _modules_images__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/images */ "./src/js/modules/images.js");
+/* harmony import */ var _parser__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./parser */ "./src/js/parser.js");
+
 
 
 
@@ -14307,8 +14406,9 @@ window.addEventListener("DOMContentLoaded", () => {
   (0,_modules_forms__WEBPACK_IMPORTED_MODULE_3__["default"])(modalState);
   (0,_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])(".container1", deadline);
   (0,_modules_images__WEBPACK_IMPORTED_MODULE_6__["default"])();
-});
 
+  // parser();
+});
 // console.log(localStorage.getItem("res"));
 })();
 
